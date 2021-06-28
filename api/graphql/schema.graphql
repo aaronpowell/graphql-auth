@@ -15,14 +15,15 @@ type Post {
 
 type Author {
   id: ID!
+  userId: String!
   name: String!
   email: String
 }
 
 type Query {
   getPost(id: ID!): Post
-  getAllPosts: [Post!]!
-  getAuthor(id: ID!): Author
+  getAllPosts(count: Int! = 5): [Post!]!
+  getAuthor(userId: String!): Author
 }
 
 input CreatePostInput {
@@ -34,6 +35,7 @@ input CreatePostInput {
 input CreateAuthorInput {
   name: String!
   email: String
+  userId: String!
 }
 
 input CreateCommentInput {

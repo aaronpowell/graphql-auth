@@ -6,19 +6,18 @@ const resolvers: Resolvers = {
     getPost(_, { id }) {
       return posts.find((p) => p.id === id);
     },
-    getAllPosts() {
-      return posts;
+    getAllPosts(_, { count }) {
+      return posts.slice(0, count);
     },
-    getAuthor(_, { id }) {
-      return authors.find((a) => a.id === id);
+    getAuthor(_, { userId }) {
+      return authors.find((a) => a.userId === userId);
     },
   },
   Mutations: {
     createAuthor(_, { input }) {
       authors.push({
         id: (authors.length + 1).toString(),
-        name: input.name,
-        email: input.email,
+        ...input,
       });
 
       return authors[authors.length - 1];
@@ -71,7 +70,7 @@ const resolvers: Resolvers = {
 
   Comment: {
     author(comment) {
-      return authors.find((a) => a.id === comment.id);
+      return authors.find((a) => a.id === comment.authorId);
     },
   },
 };

@@ -17,6 +17,7 @@ export type Scalars = {
 export type Author = {
   __typename?: 'Author';
   id: Scalars['ID'];
+  userId: Scalars['String'];
   name: Scalars['String'];
   email?: Maybe<Scalars['String']>;
 };
@@ -31,6 +32,7 @@ export type Comment = {
 export type CreateAuthorInput = {
   name: Scalars['String'];
   email?: Maybe<Scalars['String']>;
+  userId: Scalars['String'];
 };
 
 export type CreateCommentInput = {
@@ -95,8 +97,13 @@ export type QueryGetPostArgs = {
 };
 
 
+export type QueryGetAllPostsArgs = {
+  count?: Scalars['Int'];
+};
+
+
 export type QueryGetAuthorArgs = {
-  id: Scalars['ID'];
+  userId: Scalars['String'];
 };
 
 
@@ -187,6 +194,7 @@ export type ResolversTypes = {
   Mutations: ResolverTypeWrapper<{}>;
   Post: ResolverTypeWrapper<PostModel>;
   Query: ResolverTypeWrapper<{}>;
+  Int: ResolverTypeWrapper<Scalars['Int']>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
 };
 
@@ -202,11 +210,13 @@ export type ResolversParentTypes = {
   Mutations: {};
   Post: PostModel;
   Query: {};
+  Int: Scalars['Int'];
   Boolean: Scalars['Boolean'];
 };
 
 export type AuthorResolvers<ContextType = any, ParentType extends ResolversParentTypes['Author'] = ResolversParentTypes['Author']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  userId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -237,8 +247,8 @@ export type PostResolvers<ContextType = any, ParentType extends ResolversParentT
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   getPost?: Resolver<Maybe<ResolversTypes['Post']>, ParentType, ContextType, RequireFields<QueryGetPostArgs, 'id'>>;
-  getAllPosts?: Resolver<Array<ResolversTypes['Post']>, ParentType, ContextType>;
-  getAuthor?: Resolver<Maybe<ResolversTypes['Author']>, ParentType, ContextType, RequireFields<QueryGetAuthorArgs, 'id'>>;
+  getAllPosts?: Resolver<Array<ResolversTypes['Post']>, ParentType, ContextType, RequireFields<QueryGetAllPostsArgs, 'count'>>;
+  getAuthor?: Resolver<Maybe<ResolversTypes['Author']>, ParentType, ContextType, RequireFields<QueryGetAuthorArgs, 'userId'>>;
 };
 
 export type Resolvers<ContextType = any> = {

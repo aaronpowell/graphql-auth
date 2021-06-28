@@ -1,0 +1,14 @@
+.editor {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 20px;
+  row-gap: 20px;
+}
+
+.editor-surface {
+  min-height: 500px;
+}
+
+.submit {
+  grid-column: 1 / span 2;
+}

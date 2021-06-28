@@ -1,0 +1,8 @@
+query getAuthor($userId: String!) {
+  getAuthor(userId: $userId) {
+    id
+    userId
+    name
+    email
+  }
+}

@@ -1,32 +1,51 @@
-import React, { useEffect, useState } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
+import React from "react";
+import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
+import { PostList } from "./components/PostList";
+import { Home } from "./pages/Home";
+import { NewPost } from "./pages/NewPost";
+import { Post } from "./pages/Post";
+import styles from "./App.module.css";
+import { UserInfo } from "./components/UserInfo";
+import { PrivateRoute } from "./components/PrivateRoute";
+import { AuthorIdentity } from "./components/AuthorContextProvider";
+import LoginCallback from "./pages/LoginCallback";
+
+const client = new ApolloClient({
+  uri: "/api/graphql",
+  cache: new InMemoryCache(),
+});
 
 function App() {
-  const [message, setMessage] = useState("");
-  useEffect(() => {
-    fetch("/api/get-message?name=Static Web Apps")
-    .then(res => res.text())
-    .then(data => setMessage(data));
-  }, []);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-        {message && <p>{message}</p>}
-      </header>
-    </div>
+    <Router>
+      <ApolloProvider client={client}>
+        <AuthorIdentity>
+          <div className={styles.app}>
+            <aside>
+              <PostList />
+              <UserInfo />
+            </aside>
+            <section role="main">
+              <Switch>
+                <Route path="/" exact>
+                  <Home />
+                </Route>
+                <PrivateRoute path="/post/create" exact>
+                  <NewPost />
+                </PrivateRoute>
+                <Route path="/post/:id">
+                  <Post />
+                </Route>
+                <Route path="/login-callback">
+                  <LoginCallback />
+                </Route>
+              </Switch>
+            </section>
+          </div>
+        </AuthorIdentity>
+      </ApolloProvider>
+    </Router>
   );
 }
 
