@@ -7,7 +7,6 @@ import {
   CreateCommentDocument,
   CreateCommentMutation,
   GetPostDocument,
-  GetPostQuery,
 } from "../generated";
 
 type Comments = CreateCommentMutation["createComment"]["comments"];
@@ -56,8 +55,6 @@ const NewComment = ({
     </div>
   );
 };
-
-type GetPostData = GetPostQuery["getPost"];
 
 export function Post() {
   const { id } = useParams<{ id: string }>();
