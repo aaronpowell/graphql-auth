@@ -1,3 +1,6 @@
+directive @isAuthenticated on OBJECT | FIELD_DEFINITION
+directive @isSelf on OBJECT | FIELD_DEFINITION
+
 type Comment {
   id: ID!
   comment: String!
@@ -14,10 +17,10 @@ type Post {
 }
 
 type Author {
-  id: ID!
-  userId: String!
+  id: ID! @isSelf
+  userId: String! @isSelf
   name: String!
-  email: String
+  email: String @isSelf
 }
 
 type Query {
@@ -44,7 +47,7 @@ input CreateCommentInput {
   comment: String!
 }
 
-type Mutations {
+type Mutations @isAuthenticated {
   createPost(input: CreatePostInput!): Post!
   createAuthor(input: CreateAuthorInput!): Author!
   createComment(input: CreateCommentInput!): Post!

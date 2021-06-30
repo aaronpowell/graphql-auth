@@ -14,6 +14,8 @@ export type Scalars = {
   Float: number;
 };
 
+
+
 export type Author = {
   __typename?: 'Author';
   id: Scalars['ID'];
@@ -214,6 +216,14 @@ export type ResolversParentTypes = {
   Boolean: Scalars['Boolean'];
 };
 
+export type IsAuthenticatedDirectiveArgs = {  };
+
+export type IsAuthenticatedDirectiveResolver<Result, Parent, ContextType = any, Args = IsAuthenticatedDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
+
+export type IsSelfDirectiveArgs = {  };
+
+export type IsSelfDirectiveResolver<Result, Parent, ContextType = any, Args = IsSelfDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
+
 export type AuthorResolvers<ContextType = any, ParentType extends ResolversParentTypes['Author'] = ResolversParentTypes['Author']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   userId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -265,3 +275,14 @@ export type Resolvers<ContextType = any> = {
  * Use "Resolvers" root object instead. If you wish to get "IResolvers", add "typesPrefix: I" to your config.
  */
 export type IResolvers<ContextType = any> = Resolvers<ContextType>;
+export type DirectiveResolvers<ContextType = any> = {
+  isAuthenticated?: IsAuthenticatedDirectiveResolver<any, any, ContextType>;
+  isSelf?: IsSelfDirectiveResolver<any, any, ContextType>;
+};
+
+
+/**
+ * @deprecated
+ * Use "DirectiveResolvers" root object instead. If you wish to get "IDirectiveResolvers", add "typesPrefix: I" to your config.
+ */
+export type IDirectiveResolvers<ContextType = any> = DirectiveResolvers<ContextType>;

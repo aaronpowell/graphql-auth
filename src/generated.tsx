@@ -12,6 +12,8 @@ export type Scalars = {
   Float: number;
 };
 
+
+
 export type Author = {
   __typename?: 'Author';
   id: Scalars['ID'];
