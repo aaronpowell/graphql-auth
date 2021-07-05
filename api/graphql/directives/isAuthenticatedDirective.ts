@@ -5,6 +5,27 @@ import {
 import { GraphQLObjectType, defaultFieldResolver, GraphQLField } from "graphql";
 import "./typeExtensions";
 
+const isAuthenticatedResolver =
+  (
+    field: GraphQLField<any, any>,
+    objectType: GraphQLObjectType,
+    resolve: typeof defaultFieldResolver
+  ): typeof defaultFieldResolver =>
+  (...args) => {
+    const authRequired = field._authRequired || objectType._authRequired;
+
+    if (!authRequired) {
+      return resolve.apply(this, args);
+    }
+
+    const context = args[2];
+
+    if (!context.isAuthenticated) {
+      throw new AuthenticationError("Operation requires an authenticated user");
+    }
+    return resolve.apply(this, args);
+  };
+
 export class IsAuthenticatedDirective extends SchemaDirectiveVisitor {
   visitObject(type: GraphQLObjectType) {
     this.ensureFieldsWrapped(type);
@@ -29,25 +50,10 @@ export class IsAuthenticatedDirective extends SchemaDirectiveVisitor {
 
     const fields = objectType.getFields();
 
-    Object.keys(fields).forEach((fieldName) => {
+    for (const fieldName of Object.keys(fields)) {
       const field = fields[fieldName];
       const { resolve = defaultFieldResolver } = field;
-      field.resolve = async function (...args) {
-        const authRequired = field._authRequired || objectType._authRequired;
-
-        if (!authRequired) {
-          return resolve.apply(this, args);
-        }
-
-        const context = args[2];
-
-        if (!context.isAuthenticated) {
-          throw new AuthenticationError(
-            "Operation requires an authenticated user"
-          );
-        }
-        return resolve.apply(this, args);
-      };
-    });
+      field.resolve = isAuthenticatedResolver(field, objectType, resolve);
+    }
   }
 }
